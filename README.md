@@ -7,11 +7,9 @@ Self-built AstrBot plugins used by Anaria. They are not published anywhere upstr
 
 | 插件 Plugin | 功能 Feature | 版本 |
 | --- | --- | --- |
-| `astrbot_plugin_gemini_tts` | Gemini TTS 语音合成，支持 70 种音色与 OpenAI 兼容接口 TTS | 1.0.0 |
 | `astrbot_plugin_master_link` | 主动私聊通道，跨会话发消息，提供 `send_private_message` 工具 | 1.0.0 |
 | `astrbot_plugin_meme` | 本地表情包，Web 管理页、拖拽上传、URL 表情、LLM 自由调用 | 1.4.0 |
 | `astrbot_plugin_remote_admin` | 跨群远程管理，私聊即可禁言、解禁、踢人、全员禁言、撤回、发消息 | 1.0.0 |
-| `astrbot_plugin_yishi_draw` | 基于 gpt-image 的生图，文生图、参考图改图、多图融合、GIF | 1.1.0 |
 | `astrbot_plugin_global_blacklist` | 全局触发屏蔽，名单内用户在进入 LLM 前被拦下 | 1.0.0 |
 | `astrbot_plugin_deepseek_status` | DeepSeek 官方服务状态监控与群推送 | 1.0.0 |
 | `astrbot_plugin_operit_stars` | GitHub 仓库实时状态与 Star 数查询（默认 Operit / Operit2） | 1.1.0 |
@@ -26,8 +24,6 @@ Drop the plugin folder into `data/plugins/`, then restart AstrBot or reload it f
 
 - 代码里所有硬编码的 QQ 号已替换为占位符 `YOUR_QQ_ID`，用之前记得在插件配置里填自己的号，否则权限相关功能不会生效。
   All hardcoded QQ IDs are replaced with the placeholder `YOUR_QQ_ID`. Fill in your own ID in the plugin config before use.
-- 接口地址默认走官方端点，需要中转的自己改 `api_base`。
-  Endpoints default to official APIs; change `api_base` if you use a proxy.
 - `astrbot_plugin_meme` 只放了代码，`memes/` 里的表情图片没有上传，自己往里放。
   Only code is included for `meme`; the image assets in `memes/` are not uploaded.
 - 依赖 AstrBot 4.x，具体版本要求见各插件自己的 `metadata.yaml`。
