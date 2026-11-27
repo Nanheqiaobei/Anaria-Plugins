@@ -1,0 +1,9 @@
+name: astrbot_plugin_global_blacklist
+display_name: 全局触发屏蔽
+desc: 全局黑名单。名单内用户在任何群聊或私聊都不会触发机器人，消息在进入 LLM 之前就被拦下；支持指令维护与 AI 工具调用。
+short_desc: 全局黑名单，名单内用户任何群都触发不到
+version: 1.0.0
+author: 安亦诗
+repo: ""
+support_platforms:
+  - aiocqhttp

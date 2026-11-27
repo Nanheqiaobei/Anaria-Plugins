@@ -1,0 +1,12 @@
+{
+  "default_repo": {
+    "description": "默认查询的 GitHub 仓库（格式：owner/repo）",
+    "type": "string",
+    "default": "AAswordman/Operit"
+  },
+  "github_token": {
+    "description": "可选的 GitHub Personal Access Token",
+    "type": "string",
+    "default": ""
+  }
+}

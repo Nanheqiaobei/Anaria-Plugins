@@ -1,0 +1,188 @@
+{
+  "api_base": {
+    "description": "生图接口地址（Base URL）",
+    "type": "string",
+    "hint": "OpenAI 兼容地址，末尾不要带斜杠；带不带 /v1 都能识别，例如 https://api.openai.com",
+    "default": "https://api.openai.com"
+  },
+  "api_key": {
+    "description": "接口密钥",
+    "type": "string",
+    "secret": true,
+    "hint": "sk- 开头的调用密钥，会以 Bearer 头发送",
+    "default": ""
+  },
+  "default_model": {
+    "description": "默认模型",
+    "type": "string",
+    "options": [
+      "gpt-image-2.6",
+      "gpt-image-2.6-flare",
+      "gpt-image-2.6-sunburst",
+      "gpt-image-2.5",
+      "gpt-image-2.5-flare",
+      "gpt-image-2.5-sunburst",
+      "gpt-image-2"
+    ],
+    "hint": "flare / sunburst 是变体，效果差异建议实测；直连接口不存在的模型名会原样透传",
+    "default": "gpt-image-2.6"
+  },
+  "model_options": {
+    "description": "常用模型列表",
+    "type": "list",
+    "hint": "只在 /绘模型 里展示用，不影响调用",
+    "default": [
+      "gpt-image-2.6",
+      "gpt-image-2.5",
+      "gpt-image-2"
+    ]
+  },
+  "default_size": {
+    "description": "默认画幅",
+    "type": "string",
+    "options": [
+      "1024x1024",
+      "1536x1024",
+      "1024x1536",
+      "auto"
+    ],
+    "hint": "1024x1024 方形，1536x1024 横幅，1024x1536 竖幅，auto 交给模型",
+    "default": "1024x1024"
+  },
+  "default_quality": {
+    "description": "默认质量",
+    "type": "string",
+    "options": [
+      "low",
+      "medium",
+      "high",
+      "auto"
+    ],
+    "hint": "low 最快最省，high 最细但慢很多（实测同一提示词 high 要 100 秒上下）",
+    "default": "medium"
+  },
+  "enable_gif": {
+    "description": "启用 GIF 动图",
+    "type": "bool",
+    "hint": "关掉后 /动图 和动图工具都不能用；只有 gpt-image-2.6 系列支持 GIF 输出",
+    "default": true
+  },
+  "gif_frames": {
+    "description": "动图默认帧数",
+    "type": "int",
+    "hint": "2-16；实测文生图端点会忽略这个参数，插件会在本地重新编码补齐，帧数多了又慢又费",
+    "default": 8
+  },
+  "gif_frame_ms": {
+    "description": "动图默认每帧毫秒",
+    "type": "int",
+    "hint": "20-2000；120 大约每秒 8 帧，越小播得越快",
+    "default": 120
+  },
+  "gif_quality": {
+    "description": "动图默认质量",
+    "type": "string",
+    "options": ["low", "medium", "high"],
+    "hint": "动图比静态图慢，默认 low；-q 或工具参数可以单独覆盖",
+    "default": "low"
+  },
+  "gif_max_frames": {
+    "description": "动图帧数上限",
+    "type": "int",
+    "hint": "留 16；上游帧数再高也容易糊，而且尺寸会被压小",
+    "default": 16
+  },
+  "default_n": {
+    "description": "默认张数",
+    "type": "int",
+    "hint": "单次不带 -n 时生成几张",
+    "default": 1
+  },
+  "max_n": {
+    "description": "单次最大张数",
+    "type": "int",
+    "hint": "上限 10，防止一次刷太多",
+    "default": 4
+  },
+  "request_timeout": {
+    "description": "生图请求超时（秒）",
+    "type": "int",
+    "hint": "high 质量 + 大画幅可能上百秒，别设太小",
+    "default": 300
+  },
+  "download_timeout": {
+    "description": "图片下载超时（秒）",
+    "type": "int",
+    "default": 120
+  },
+  "proxy": {
+    "description": "HTTP 代理",
+    "type": "string",
+    "hint": "留空直连；例如 http://127.0.0.1:7890",
+    "default": ""
+  },
+  "enable_style": {
+    "description": "启用风格预设",
+    "type": "bool",
+    "hint": "关闭后 -st 参数会被忽略，提示词原样发送",
+    "default": true
+  },
+  "enable_llm_tool": {
+    "description": "启用 LLM 生图工具",
+    "type": "bool",
+    "hint": "开启后我自己可以在聊天里判断要不要画、画什么",
+    "default": true
+  },
+  "llm_tool_respect_access": {
+    "description": "LLM 工具也受权限限制",
+    "type": "bool",
+    "hint": "开启后只有符合 access_mode 的人能让我画；关闭则我判断合适就画",
+    "default": true
+  },
+  "access_mode": {
+    "description": "指令使用权限",
+    "type": "string",
+    "options": [
+      "everyone",
+      "admin",
+      "master"
+    ],
+    "hint": "everyone 所有人可用；admin 群主/管理员+博士；master 仅博士",
+    "default": "admin"
+  },
+  "allow_users": {
+    "description": "额外白名单",
+    "type": "list",
+    "hint": "名单内 QQ 号不受 access_mode 与冷却限制",
+    "default": []
+  },
+  "master_qq": {
+    "description": "超级管理员 QQ",
+    "type": "string",
+    "hint": "这个号不受权限与冷却限制",
+    "default": "YOUR_QQ_ID"
+  },
+  "cooldown_seconds": {
+    "description": "普通用户冷却（秒）",
+    "type": "int",
+    "hint": "0 表示不限制；博士、管理员、白名单不受限",
+    "default": 30
+  },
+  "max_ref_images": {
+    "description": "参考图上限",
+    "type": "int",
+    "hint": "改绘时最多取几张图当参考",
+    "default": 4
+  },
+  "history_size": {
+    "description": "历史记录保留条数",
+    "type": "int",
+    "default": 200
+  },
+  "keep_days": {
+    "description": "本地图片保留天数",
+    "type": "int",
+    "hint": "0 表示不自动清理；清理只作用于插件自己的 images 目录",
+    "default": 7
+  }
+}

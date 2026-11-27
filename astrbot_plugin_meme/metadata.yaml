@@ -1,0 +1,4 @@
+name: astrbot_plugin_meme
+version: 1.4.0
+author: 博士 & 安亦诗
+description: 本地表情包插件，支持 Web 管理页面、拖拽上传、URL 表情、占位符语法及 LLM 自由调用发表情

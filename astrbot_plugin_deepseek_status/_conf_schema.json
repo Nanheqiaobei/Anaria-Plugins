@@ -1,0 +1,12 @@
+{
+  "target_groups": {
+    "description": "监控异常时推送的目标群号列表",
+    "type": "list",
+    "default": ["1051920958"]
+  },
+  "check_interval": {
+    "description": "轮询检查间隔（秒）",
+    "type": "int",
+    "default": 60
+  }
+}

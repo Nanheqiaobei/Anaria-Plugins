@@ -1,0 +1,32 @@
+{
+  "enable": {
+    "description": "是否启用全局屏蔽",
+    "hint": "关闭后名单仍然保留，但不再拦截任何消息。",
+    "type": "bool",
+    "default": true
+  },
+  "enable_in_private": {
+    "description": "私聊是否也拦截",
+    "hint": "默认开启。关闭则只在群聊里屏蔽，私聊仍然正常对话。",
+    "type": "bool",
+    "default": true
+  },
+  "tip_message": {
+    "description": "被屏蔽者触发时回复的话",
+    "hint": "留空表示完全静默，不留任何痕迹。",
+    "type": "text",
+    "default": ""
+  },
+  "allow_qq_list": {
+    "description": "可操作屏蔽名单的 QQ 列表",
+    "hint": "除一级博士外，额外允许操作名单的人。",
+    "type": "list",
+    "default": [
+      "1002153674",
+      "1022156836",
+      "167141625",
+      "3925346097",
+      "3462831700"
+    ]
+  }
+}

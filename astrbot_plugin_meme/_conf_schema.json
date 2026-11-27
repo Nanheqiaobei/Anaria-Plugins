@@ -1,0 +1,20 @@
+{
+  "meme_dir": {
+    "type": "string",
+    "description": "本地表情包存放目录",
+    "hint": "图片文件存放的绝对路径。直接将图片放进此目录，文件名（不含后缀名）即为表情名称，支持 png/jpg/jpeg/gif/webp 格式。修改后自动同步。",
+    "default": "/AstrBot/data/plugins/astrbot_plugin_meme/memes"
+  },
+  "admin_only": {
+    "type": "bool",
+    "description": "仅管理员可存表情",
+    "hint": "开启后，仅群主、管理员或 Master 可通过「/存表情」指令添加表情，防止普通群友随意写入。",
+    "default": true
+  },
+  "custom_url_memes": {
+    "type": "string",
+    "description": "自定义网络表情（每行一个）",
+    "hint": "不想传文件时可直接在此配置在线图片，格式：表情名=图片URL。例如：\\n点赞=https://example.com/like.png\\n流泪=https://example.com/cry.jpg",
+    "default": ""
+  }
+}

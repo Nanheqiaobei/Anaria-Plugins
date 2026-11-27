@@ -1,0 +1,12 @@
+{
+  "extra_admins": {
+    "description": "额外允许跨群管理的 QQ 号",
+    "type": "list",
+    "default": []
+  },
+  "apply_sex": {
+    "description": "启动后自动改一次资料性别：男/女，改完不再重复；留空不改",
+    "type": "string",
+    "default": ""
+  }
+}

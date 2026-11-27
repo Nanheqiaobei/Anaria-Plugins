@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表情包管理 - AstrBot</title>
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary-color: #3b82f6;
+      --primary-hover: #2563eb;
+      --danger-color: #ef4444;
+      --danger-hover: #dc2626;
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    }
+
+    body.dark {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-color: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --primary-color: #3b82f6;
+      --primary-hover: #60a5fa;
+      --danger-color: #ef4444;
+      --danger-hover: #f87171;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 24px;
+      line-height: 1.5;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .header-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .upload-section {
+      background-color: var(--card-bg);
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .upload-section.dragover {
+      border-color: var(--primary-color);
+      background-color: rgba(59, 130, 246, 0.05);
+    }
+
+    .upload-controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      font-size: 14px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary-color);
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .meme-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .img-wrapper {
+      width: 100%;
+      height: 140px;
+      background: rgba(0, 0, 0, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .img-wrapper img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .card-footer {
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .meme-name {
+      font-size: 13px;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 110px;
+    }
+
+    .badge-url {
+      font-size: 10px;
+      padding: 2px 6px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 4px;
+    }
+
+    .btn-del {
+      background: transparent;
+      color: var(--danger-color);
+      border: none;
+      cursor: pointer;
+      padding: 4px 6px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .btn-del:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 14px;
+      grid-column: 1 / -1;
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #fff;
+      background: #1e293b;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.25s ease;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .toast-success { background: #10b981; }
+    .toast-error { background: #ef4444; }
+    .toast-info { background: #3b82f6; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>表情包管理面板</h1>
+      <div class="header-sub" id="sub-info">正在读取目录与状态...</div>
+    </div>
+    <button class="btn btn-primary" onclick="loadMemes()">刷新列表</button>
+  </div>
+
+  <div class="upload-section" id="drop-zone">
+    <p style="font-size: 14px; color: var(--text-muted);">
+      点击选择图片或将图片拖拽到此处上传（支持 png、jpg、gif、webp）
+    </p>
+    <div class="upload-controls">
+      <input type="file" id="file-input" accept="image/png,image/jpeg,image/gif,image/webp" style="display: none;">
+      <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">选择本地图片</button>
+      <input type="text" id="meme-name-input" placeholder="表情名称（留空使用文件名）">
+      <button class="btn btn-primary" id="btn-upload" onclick="handleUpload()" disabled>确认上传</button>
+    </div>
+    <div id="selected-file-name" style="margin-top: 8px; font-size: 12px; color: var(--text-muted);"></div>
+  </div>
+
+  <div class="grid-container" id="memes-container">
+    <div class="empty-state">加载中...</div>
+  </div>
+
+  <script>
+    let bridge = null;
+    let selectedFile = null;
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      if (window.AstrBotPluginPage) {
+        bridge = window.AstrBotPluginPage;
+        try {
+          const ctx = await bridge.ready();
+          if (ctx.isDark) document.body.classList.add("dark");
+          bridge.onContext((newCtx) => {
+            if (newCtx.isDark) document.body.classList.add("dark");
+            else document.body.classList.remove("dark");
+          });
+        } catch (e) {
+          console.warn("Bridge ready failed:", e);
+        }
+      }
+      initDragDrop();
+      initFileInput();
+      loadMemes();
+    });
+
+    function initFileInput() {
+      const fileInput = document.getElementById("file-input");
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files && e.target.files[0]) {
+          selectedFile = e.target.files[0];
+          document.getElementById("selected-file-name").textContent = `已选文件: ${selectedFile.name} (${(selectedFile.size / 1024).toFixed(1)} KB)`;
+          document.getElementById("btn-upload").removeAttribute("disabled");
+        }
+      });
+    }
+
+    function initDragDrop() {
+      const dropZone = document.getElementById("drop-zone");
+      ["dragenter", "dragover"].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.add("dragover");
+        }, false);
+      });
+      ["dragleave", "drop"].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.remove("dragover");
+        }, false);
+      });
+      dropZone.addEventListener("drop", (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files.length > 0) {
+          selectedFile = files[0];
+          document.getElementById("selected-file-name").textContent = `已选文件: ${selectedFile.name} (${(selectedFile.size / 1024).toFixed(1)} KB)`;
+          document.getElementById("btn-upload").removeAttribute("disabled");
+        }
+      });
+    }
+
+    async function loadMemes() {
+      const container = document.getElementById("memes-container");
+      try {
+        let res;
+        if (bridge) {
+          res = await bridge.apiGet("list");
+        } else {
+          const r = await fetch("/astrbot_plugin_meme/list");
+          res = await r.json();
+          if (res.status === "ok") res = res.data;
+        }
+
+        const data = res.data || res;
+        document.getElementById("sub-info").textContent = `存放目录: ${data.meme_dir} | 共 ${data.total || 0} 个可用表情`;
+
+        container.innerHTML = "";
+        const locals = data.local_memes || [];
+        const urls = data.url_memes || [];
+
+        if (locals.length === 0 && urls.length === 0) {
+          container.innerHTML = '<div class="empty-state">表情库是空的，点击上方上传或发送群指令添加~</div>';
+          return;
+        }
+
+        locals.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "meme-card";
+          const imgUrl = `/astrbot_plugin_meme/image?filename=${encodeURIComponent(item.filename)}`;
+          card.innerHTML = `
+            <div class="img-wrapper">
+              <img src="${imgUrl}" alt="${item.name}" loading="lazy">
+            </div>
+            <div class="card-footer">
+              <span class="meme-name" title="${item.name}">${item.name}</span>
+              <button class="btn-del" onclick="deleteMeme(this, '${item.filename}')">删除</button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        urls.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "meme-card";
+          card.innerHTML = `
+            <div class="img-wrapper">
+              <img src="${item.url}" alt="${item.name}" loading="lazy">
+            </div>
+            <div class="card-footer">
+              <span class="meme-name" title="${item.name}">${item.name}</span>
+              <span class="badge-url">URL</span>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="empty-state" style="color: var(--danger-color);">读取失败: ${err.message || err}</div>`;
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      let toast = document.getElementById('toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.className = `toast toast-${type} show`;
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.className = 'toast';
+      }, 3000);
+    }
+
+    async function handleUpload() {
+      if (!selectedFile) return;
+      const btn = document.getElementById("btn-upload");
+      const nameInput = document.getElementById("meme-name-input");
+      const customName = nameInput.value.trim();
+      btn.disabled = true;
+      btn.textContent = "上传中...";
+
+      try {
+        let fileToUpload = selectedFile;
+        if (customName) {
+          const extIndex = selectedFile.name.lastIndexOf('.');
+          const ext = extIndex !== -1 ? selectedFile.name.substring(extIndex) : '';
+          const fullName = customName.endsWith(ext) ? customName : (customName + ext);
+          fileToUpload = new File([selectedFile], fullName, { type: selectedFile.type });
+        }
+
+        if (bridge) {
+          await bridge.upload("upload", fileToUpload);
+        } else {
+          const formData = new FormData();
+          formData.append("file", fileToUpload);
+          formData.append("name", customName);
+          const r = await fetch("/astrbot_plugin_meme/upload", {
+            method: "POST",
+            body: formData
+          });
+          const res = await r.json();
+          if (res.status === "error") throw new Error(res.message);
+        }
+
+        showToast("上传成功！", "success");
+        selectedFile = null;
+        nameInput.value = "";
+        document.getElementById("selected-file-name").textContent = "";
+        document.getElementById("file-input").value = "";
+        await loadMemes();
+      } catch (err) {
+        console.error("上传错误:", err);
+        showToast("上传失败: " + (err.message || err), "error");
+      } finally {
+        btn.textContent = "确认上传";
+        btn.disabled = !selectedFile;
+      }
+    }
+
+    async function deleteMeme(btn, filename) {
+      if (btn.dataset.confirming !== "true") {
+        btn.dataset.confirming = "true";
+        btn.textContent = "确认删除?";
+        btn.style.color = "#dc2626";
+        btn.style.fontWeight = "bold";
+        setTimeout(() => {
+          if (btn && btn.isConnected) {
+            btn.dataset.confirming = "false";
+            btn.textContent = "删除";
+            btn.style.color = "";
+            btn.style.fontWeight = "";
+          }
+        }, 3000);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "删除中...";
+      try {
+        if (bridge) {
+          await bridge.apiPost("delete", { filename });
+        } else {
+          const r = await fetch("/astrbot_plugin_meme/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename })
+          });
+          const res = await r.json();
+          if (res.status === "error") throw new Error(res.message);
+        }
+        showToast("删除成功", "success");
+        await loadMemes();
+      } catch (err) {
+        console.error("删除错误:", err);
+        showToast("删除失败: " + (err.message || err), "error");
+      }
+    }
+  </script>
+</body>
+</html>

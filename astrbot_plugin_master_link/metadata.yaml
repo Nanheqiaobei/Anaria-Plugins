@@ -1,0 +1,4 @@
+name: astrbot_plugin_master_link
+version: 1.0.0
+author: 安亦诗
+description: 主动私聊通道，可跨会话给博士或指定 QQ 发消息，提供 send_private_message 工具与 /私信 指令

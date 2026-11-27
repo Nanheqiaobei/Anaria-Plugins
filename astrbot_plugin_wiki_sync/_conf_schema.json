@@ -1,0 +1,32 @@
+{
+  "repo_path": {
+    "description": "本地 Operit2-wiki 仓库路径",
+    "type": "string",
+    "default": "/AstrBot/data/安亦诗本地记忆库/Operit知识储存库/Operit2-wiki"
+  },
+  "branch": {
+    "description": "跟踪的分支名",
+    "type": "string",
+    "default": "main"
+  },
+  "interval_hours": {
+    "description": "自动检查间隔（小时），0 表示关闭定时检查",
+    "type": "float",
+    "default": 6
+  },
+  "notify_enabled": {
+    "description": "自动拉取到新版本后是否推送通知",
+    "type": "bool",
+    "default": true
+  },
+  "notify_session": {
+    "description": "通知推送的会话，例如 pre-config:FriendMessage:YOUR_QQ_ID",
+    "type": "string",
+    "default": "pre-config:FriendMessage:YOUR_QQ_ID"
+  },
+  "admin_qqs": {
+    "description": "允许手动触发同步的 QQ 号列表",
+    "type": "list",
+    "default": ["YOUR_QQ_ID"]
+  }
+}

@@ -1,0 +1,4 @@
+name: astrbot_plugin_gemini_tts
+version: 1.0.0
+author: 博士 & 安亦诗
+description: 基于 AIStudio2API / Gemini 3.8 Flash TTS 的 AstrBot 语音合成插件，支持 70 种音色选择、OpenAI 兼容 / Gemini 原生(单人/多角色对话/逐段风格/流式SSE) / Interactions 四种调用方式、API Key 配置、LLM 语音工具及自动转语音

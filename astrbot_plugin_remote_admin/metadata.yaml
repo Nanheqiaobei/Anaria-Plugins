@@ -1,0 +1,4 @@
+name: astrbot_plugin_remote_admin
+version: 1.0.0
+author: 安亦诗
+description: 跨群远程管理，私聊即可对指定群禁言、解禁、踢人、全员禁言、撤回消息、发消息

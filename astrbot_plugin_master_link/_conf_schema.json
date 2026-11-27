@@ -1,0 +1,17 @@
+{
+  "master_qq": {
+    "description": "默认收件人（博士）",
+    "type": "string",
+    "default": "YOUR_QQ_ID"
+  },
+  "platform_id": {
+    "description": "发消息用的平台 ID，留空自动判断",
+    "type": "string",
+    "default": ""
+  },
+  "extra_targets": {
+    "description": "额外允许发送的 QQ 号",
+    "type": "list",
+    "default": []
+  }
+}
